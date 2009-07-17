@@ -41,7 +41,7 @@ class DataGeneratorTest < Test::Unit::TestCase
     end
 
     should "assign all users to the project" do
-      DataGenerator.users 5
+      5.times { User.make }
 
       assert_difference("Member.count", 25) do
         DataGenerator.projects
@@ -55,8 +55,23 @@ class DataGeneratorTest < Test::Unit::TestCase
   end
 
   context "#issues" do
-    should "generate 100 random issues by default"
-    should "generate x random issues with a parameter"
+    setup {
+      5.times { make_project_with_trackers }
+      5.times { IssuePriority.make }
+      5.times { User.make }
+    }
+    
+    should "generate 100 random issues by default" do
+      assert_difference("Issue.count",100) do
+        DataGenerator.issues
+      end
+    end
+
+    should "generate x random issues with a parameter" do
+      assert_difference("Issue.count",500) do
+        DataGenerator.issues 500
+      end
+    end
   end
 
   context "#journals" do

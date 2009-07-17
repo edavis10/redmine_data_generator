@@ -4,6 +4,32 @@ require 'random_data'
 class DataGenerator
   UserStatuses = [User::STATUS_ACTIVE, User::STATUS_REGISTERED, User::STATUS_LOCKED]
 
+  # Generate issues
+  def self.issues(count=100)
+    projects = Project.all
+    status = IssueStatus.all
+    priorities = IssuePriority.all
+    users = User.all
+
+    ActiveRecord::Base.observers = []
+    count.times do |i|
+      issue = Issue.new(
+                        :tracker => Tracker.find(:first),
+                        :project => projects.rand, # from faker gem
+                        :subject => Faker::Company.catch_phrase,
+                        :description => Random.paragraphs(3),
+                        :status => status.rand,
+                        :priority => priorities.rand,
+                        :author => users.rand,
+                        :assigned_to => users.rand
+                        )
+      unless issue.save
+        Rails.logger.error issue.errors.full_messages
+      end
+    end
+
+  end
+  
   # Generate projects and members
   def self.projects(count=5)
     count.times do |n|

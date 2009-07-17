@@ -8,4 +8,7 @@ require 'faker'
 
 Rails::Initializer.run do |config|
   config.gem "thoughtbot-shoulda", :lib => "shoulda", :source => "http://gems.github.com"
+  config.gem "notahat-machinist", :lib => "machinist", :source => "http://gems.github.com"
 end
+
+require File.expand_path(File.dirname(__FILE__) + '/blueprints/blueprint')
