@@ -1,0 +1,30 @@
+= Redmine Data Generator
+
+The Redmine Data Generator plugin is used to quickly generate a bunch of data for Redmine.
+
+== Features
+
+* TODO
+
+== Getting the plugin
+
+A copy of the plugin can be downloaded from {Little Stream Software}[https://projects.littlestreamsoftware.com/projects/redmine-misc/files] or from {GitHub}[http://github.com/edavis10/redmine-misc]
+
+== Installation and Setup
+
+1. Install the TODO gem: +sudo gem install +
+2. Follow the Redmine plugin installation steps at: http://www.redmine.org/wiki/redmine/Plugins  Make sure the plugin is installed to +vendor/plugins/redmine_kanban+
+3. TODO
+
+== Usage
+
+TODO
+
+== License
+
+This plugin is licensed under the GNU GPL v2.  See COPYRIGHT.txt and GPL.txt for details.
+
+== Project help
+
+If you need help you can contact the maintainer on the bug tracker located at  https://projects.littlestreamsoftware.com
+
