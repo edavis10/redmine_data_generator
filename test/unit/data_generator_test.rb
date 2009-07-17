@@ -52,6 +52,17 @@ class DataGeneratorTest < Test::Unit::TestCase
       end
     end
 
+    should "enable all modules for each project" do
+      module_count = Redmine::AccessControl.available_project_modules.length
+      
+      DataGenerator.projects
+
+      Project.all.each do |project|
+        assert_equal module_count, project.enabled_modules.length
+      end
+
+    end
+    
   end
 
   context "#issues" do

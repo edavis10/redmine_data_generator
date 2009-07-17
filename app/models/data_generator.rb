@@ -49,6 +49,10 @@ class DataGenerator
         User.all(:conditions => ['status IN (?)', UserStatuses ]).each do |user|
           Member.create({:user => user, :project => project, :roles => [roles.rand]})
         end
+
+        Redmine::AccessControl.available_project_modules.each do |module_name|
+          EnabledModule.create(:name => module_name, :project => project)
+        end
       else
         Rails.logger.error project.errors.full_messages
       end
