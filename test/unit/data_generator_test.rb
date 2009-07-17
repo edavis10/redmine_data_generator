@@ -80,7 +80,26 @@ class DataGeneratorTest < Test::Unit::TestCase
   end
 
   context "#time_entries" do
-    should "generate 100 random time entries by default"
-    should "generate x random time entries with a parameter"
+    setup {
+      5.times { make_project_with_trackers }
+      project = Project.find(:last)
+      5.times {
+        Issue.make(:project => project, :tracker => project.trackers.last)
+      }
+      5.times { User.make }
+      5.times { TimeEntryActivity.make }
+    }
+
+    should "generate 100 random time entries by default" do
+      assert_difference("TimeEntry.count", 100) do
+        DataGenerator.time_entries
+      end
+    end
+
+    should "generate x random time entries with a parameter" do
+      assert_difference("TimeEntry.count", 250) do
+        DataGenerator.time_entries 250
+      end
+    end
   end
 end

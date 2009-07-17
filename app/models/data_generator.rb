@@ -55,6 +55,30 @@ class DataGenerator
     end
   end
 
+  # Generate time entries
+  def self.time_entries(count=100)
+    users = User.all
+    issues = Issue.all
+    activities = TimeEntryActivity.all
+      
+    count.times do
+      issue = issues.rand
+      te = TimeEntry.new(
+                       :project => issue.project,
+                       :user => users.rand,
+                       :issue => issue,
+                       :hours => (1..20).to_a.rand,
+                       :comments => Faker::Company.bs,
+                       :activity => activities.rand,
+                       :spent_on => Random.date
+                         )
+      unless te.save
+        Rails.logger.error te.errors.full_messages
+      end
+    end
+ 
+  end
+  
   # Generate user accounts
   def self.users(count=5)
     count.times do

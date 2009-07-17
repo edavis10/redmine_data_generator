@@ -118,6 +118,10 @@ IssuePriority.blueprint do
   name { Sham.single_name }
 end
 
+TimeEntryActivity.blueprint do
+  name { Sham.single_name }
+end
+
 
 Issue.blueprint do
   project
