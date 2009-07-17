@@ -1,6 +1,10 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class DataGeneratorTest < Test::Unit::TestCase
+  setup {
+    User.destroy_all
+  }
+  
   context "#all" do
     should "run users"
     should "run projects"
@@ -24,9 +28,30 @@ class DataGeneratorTest < Test::Unit::TestCase
   end
 
   context "#projects" do
-    should "generate 5 random projects by default"
-    should "generate x random projects with a parameter"
-    should "assign all users to the project"
+    should "generate 5 random projects by default" do
+      assert_difference("Project.count",5) do
+        DataGenerator.projects
+      end
+    end
+
+    should "generate x random projects with a parameter" do
+      assert_difference("Project.count",50) do
+        DataGenerator.projects 50
+      end
+    end
+
+    should "assign all users to the project" do
+      DataGenerator.users 5
+
+      assert_difference("Member.count", 25) do
+        DataGenerator.projects
+      end
+
+      Project.all.each do |project|
+        assert_equal 5, project.members.length
+      end
+    end
+
   end
 
   context "#issues" do
