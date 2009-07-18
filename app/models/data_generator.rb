@@ -51,7 +51,7 @@ class DataGenerator
         end
 
         Redmine::AccessControl.available_project_modules.each do |module_name|
-          EnabledModule.create(:name => module_name, :project => project)
+          EnabledModule.create(:name => module_name.to_s, :project => project)
         end
       else
         Rails.logger.error project.errors.full_messages
