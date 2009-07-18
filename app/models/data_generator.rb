@@ -12,7 +12,7 @@ class DataGenerator
     users = User.all
 
     ActiveRecord::Base.observers = []
-    count.times do |i|
+    count.to_i.times do |i|
       issue = Issue.new(
                         :tracker => Tracker.find(:first),
                         :project => projects.rand, # from faker gem
@@ -32,7 +32,7 @@ class DataGenerator
   
   # Generate projects and members
   def self.projects(count=5)
-    count.times do |n|
+    count.to_i.times do |n|
       project = Project.create(
                                :name => Faker::Company.catch_phrase[0..29],
                                :description => Faker::Company.bs,
@@ -65,7 +65,7 @@ class DataGenerator
     issues = Issue.all
     activities = TimeEntryActivity.all
       
-    count.times do
+    count.to_i.times do
       issue = issues.rand
       te = TimeEntry.new(
                        :project => issue.project,
@@ -85,7 +85,7 @@ class DataGenerator
   
   # Generate user accounts
   def self.users(count=5)
-    count.times do
+    count.to_i.times do
       user = User.new(
                       :firstname => Faker::Name.first_name,
                       :lastname => Faker::Name.last_name,
