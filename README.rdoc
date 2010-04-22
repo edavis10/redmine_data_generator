@@ -18,7 +18,13 @@ A copy of the plugin can be downloaded from {Little Stream Software}[https://pro
 
 == Usage
 
-TODO
+To generate data, run any of the following rake tasks from your Redmine root
+
+    rake data_generator:all              # Generates random data for all supported datatypes
+    rake data_generator:issues           # Generate random issues.
+    rake data_generator:projects         # Generate random projects.
+    rake data_generator:time_entries     # Generate random time entries.
+    rake data_generator:users            # Generate random users.
 
 == License
 
