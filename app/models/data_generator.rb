@@ -13,15 +13,23 @@ class DataGenerator
 
     ActiveRecord::Base.observers = []
     count.to_i.times do |i|
+      project = projects.rand
+      parent_id = if [true, false].rand && project.issues.count > 0
+                    project.issues.first(:offset => (1..project.issues.count).to_a.rand).try(:id)
+                  end
+      
       issue = Issue.new(
                         :tracker => Tracker.find(:first),
-                        :project => projects.rand, # from faker gem
+                        :project => project,
                         :subject => Faker::Company.catch_phrase,
                         :description => Random.paragraphs(3),
                         :status => status.rand,
                         :priority => priorities.rand,
                         :author => users.rand,
-                        :assigned_to => users.rand
+                        :assigned_to => users.rand,
+                        :start_date => (1..120).to_a.rand.days.ago.to_date.to_s,
+                        :due_date => (1..120).to_a.rand.days.from_now.to_date.to_s,
+                        :parent_issue_id => parent_id
                         )
       unless issue.save
         Rails.logger.error issue.errors.full_messages
@@ -33,12 +41,18 @@ class DataGenerator
   # Generate projects and members
   def self.projects(count=5)
     count.to_i.times do |n|
+      parent = if [true, false].rand && Project.count > 0
+                 Project.first(:offset => (1..Project.count).to_a.rand)
+               end
+                 
       project = Project.create(
                                :name => Faker::Company.catch_phrase[0..29],
                                :description => Faker::Company.bs,
                                :homepage => Faker::Internet.domain_name,
                                :identifier => Faker::Internet.domain_word[0..16] + n.to_s
                                )
+      project.set_parent!(parent) if parent
+      
       project.trackers = Tracker.find(:all)
       if project.save
         # Roles
