@@ -45,7 +45,7 @@ class DataGenerator
     status = IssueStatus.all
     priorities = IssuePriority.all
     
-    issues = Issue.all(:limit => count, :order => 'id desc')
+    issues = Issue.all(:limit => count, :order => 'subject asc, id desc') # Semi-random sort
     issues.each do |issue|
       User.current = issue.assignable_users.rand
 
@@ -64,10 +64,17 @@ class DataGenerator
           issue.status = status.rand
         end
       end
-      puts issue.changes.inspect
-      unless issue.save
-        Rails.logger.error issue.errors.full_messages
+      issue.journal_notes = Random.paragraphs(1)
+
+      created_days_ago = (Date.today - issue.created_on.to_date).to_i
+      update_date = (0..created_days_ago).to_a.rand # Random date since creation
+      
+      Timecop.freeze(update_date.days.ago) do
+        unless issue.save
+          Rails.logger.error issue.errors.full_messages
+        end
       end
+      Timecop.return
     end
     
   end
