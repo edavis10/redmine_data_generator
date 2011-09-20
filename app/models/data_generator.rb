@@ -47,6 +47,7 @@ class DataGenerator
     
     issues = Issue.all(:limit => count, :order => 'subject asc, id desc') # Semi-random sort
     issues.each do |issue|
+      issue.reload # in case of stale object from subtasks
       User.current = issue.assignable_users.rand
 
       # Random changes
