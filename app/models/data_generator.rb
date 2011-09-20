@@ -38,6 +38,40 @@ class DataGenerator
 
   end
   
+  # Generate issues
+  def self.issue_history(count=100)
+    ActiveRecord::Base.observers = []
+    change_attributes = [:subject, :description, :priority, :status]
+    status = IssueStatus.all
+    priorities = IssuePriority.all
+    
+    issues = Issue.all(:limit => count, :order => 'id desc')
+    issues.each do |issue|
+      User.current = issue.assignable_users.rand
+
+      # Random changes
+      number_of_changes = (change_attributes.length / 2).floor
+      number_of_changes.times do
+        attribute_to_change = change_attributes.rand
+        case attribute_to_change
+        when :subject
+          issue.subject = Faker::Company.catch_phrase
+        when :description
+          issue.description = Random.paragraphs(3)
+        when :priority
+          issue.priority = priorities.rand
+        when :status
+          issue.status = status.rand
+        end
+      end
+      puts issue.changes.inspect
+      unless issue.save
+        Rails.logger.error issue.errors.full_messages
+      end
+    end
+    
+  end
+
   # Generate projects and members
   def self.projects(count=5)
     count.to_i.times do |n|

@@ -7,6 +7,11 @@ namespace :data_generator do
     DataGenerator.issues ENV['COUNT'] || 100
   end
 
+  desc "Generate random issue history for several issues.  Default: 100, override with COUNT=x"
+  task :issue_history => :environment do
+    DataGenerator.issue_history ENV['COUNT'] || 100
+  end
+
   desc "Generate random projects.  Default: 5, override with COUNT=x"
   task :projects => :environment do
     DataGenerator.projects ENV['COUNT'] || 5
